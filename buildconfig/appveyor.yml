@@ -174,7 +174,8 @@ install:
           cmd /c start /wait $exePath /quiet TargetDir="$targetPath" Shortcuts=0 Include_launcher=1 InstallLauncherAllUsers=1 Include_debug=1
           Remove-Item $exePath
 
-          Start-ProcessWithOutput "$targetPath\python.exe --version"
+          Start-Process -FilePath "$targetPath\python.exe" -ArgumentList '--version' -NoNewWindow -Wait -RedirectStandardOutput stdout.txt -RedirectStandardError stderr.txt
+          Get-Content stdout.txt
 
           Write-Host "Installed Python $version" -ForegroundColor Green
       }
@@ -184,6 +185,7 @@ install:
           InstallPythonEXE $env:PYTHON_VERSION $env:PYTHON_ARCH $env:PYTHON_SUFFIX $env:PYTHONPATH
         }
       }
+
 
   - "%PYPY_DOWNLOAD%"
   - "set HOME=%APPVEYOR_BUILD_FOLDER%"
